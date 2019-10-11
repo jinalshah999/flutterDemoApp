@@ -25,12 +25,24 @@ class MyAppHomePage extends StatefulWidget {
 
 class _MyAppHomePage extends State<MyAppHomePage> {
   int _counter = 0;
+  String ans='';
+  final controller_number=TextEditingController();
 void incCounter(){
  setState(() {
   _counter=_counter+1; 
  });
- 
-}
+ }
+ void factorial(){
+   int no=int.parse(controller_number.text);
+   int fact=1;
+   while(no>0){
+     fact=fact*no;
+     no=no-1;
+   }
+   setState(() {
+    ans=fact.toString(); 
+   });
+ }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -50,7 +62,17 @@ void incCounter(){
               fontSize: 30.0,
               fontWeight: FontWeight.bold,
             ),
-          )
+          ),
+          TextFormField( keyboardType: TextInputType.number,
+          controller: controller_number,
+            decoration: InputDecoration(
+            hintText: 'Enter Number',
+          ),),
+          RaisedButton(
+            child: Text('Facto'),
+            onPressed: factorial,
+          ), 
+          Text('ans is $ans',style: TextStyle(fontSize: 30.0,),)
         ],
       ),
     );
