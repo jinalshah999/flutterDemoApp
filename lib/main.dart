@@ -24,25 +24,64 @@ class MyAppHomePage extends StatefulWidget {
 }
 
 class _MyAppHomePage extends State<MyAppHomePage> {
-  int _counter = 0;
-  String ans='';
-  final controller_number=TextEditingController();
-void incCounter(){
- setState(() {
-  _counter=_counter+1; 
- });
- }
- void factorial(){
-   int no=int.parse(controller_number.text);
-   int fact=1;
-   while(no>0){
-     fact=fact*no;
-     no=no-1;
-   }
-   setState(() {
-    ans=fact.toString(); 
-   });
- }
+  String _ans = '',output='';
+  double num1,num2,result;
+  String oper='';
+  void buttonPressed(String value) {
+    if (value == "CE") {
+      _ans='';
+      num1=0.0;
+      num2=0.0;
+      oper='';
+      output='';
+    }
+    else if(value=="+"||value=="-"||value=="/"||value=="*"){
+      num1= double.parse(_ans);
+      _ans='';
+      oper=value;
+    }
+    else if(value=="="){
+      num2=double.parse(_ans);
+        if(oper=="+"){
+          result=num1+num2;
+        }
+        if(oper=="-"){
+          result=num1-num2;
+        }
+        if(oper=="*"){
+          result=num1*num2;
+        }
+        if(oper=="/"){
+          result=num1/num2;
+        }
+        _ans=result.toString();
+    }
+    else{
+      _ans=_ans+value;
+    }
+    setState(() {
+     output=_ans; 
+    });
+  }
+
+  Widget makeButton(String buttonText) {
+    return Expanded(
+      child: OutlineButton(
+        padding: EdgeInsets.all(24.0),
+        onPressed: () {
+          buttonPressed(buttonText);
+        },
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -50,30 +89,63 @@ void incCounter(){
       appBar: AppBar(
         title: Text('Factorial Demo'),
       ),
-      body: Column(
-        children: <Widget>[
-          RaisedButton(
-            child: Text('Click Me1'),
-            onPressed: incCounter,
-          ),
-          Text(
-            'You pressed Button $_counter',
-            style: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Text(
+              '$_ans',
+              style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          TextFormField( keyboardType: TextInputType.number,
-          controller: controller_number,
-            decoration: InputDecoration(
-            hintText: 'Enter Number',
-          ),),
-          RaisedButton(
-            child: Text('Facto'),
-            onPressed: factorial,
-          ), 
-          Text('ans is $ans',style: TextStyle(fontSize: 30.0,),)
-        ],
+            Expanded(
+              child: Divider(),
+            ),
+            Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    makeButton('7'),
+                    makeButton('8'),
+                    makeButton('9'),
+                    makeButton('/'),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    makeButton('4'),
+                    makeButton('5'),
+                    makeButton('6'),
+                    makeButton('*'),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    makeButton('1'),
+                    makeButton('2'),
+                    makeButton('3'),
+                    makeButton('+'),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    makeButton('.'),
+                    makeButton('0'),
+                    makeButton('00'),
+                    makeButton('-'),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    makeButton('CE'),
+                    makeButton('='),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
